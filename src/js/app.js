@@ -1,5 +1,6 @@
 var web3Provider = null;
-var contracts = {};
+var EthereumContract = null;
+
 
 function work() {	
 
@@ -11,16 +12,15 @@ function work() {
 	// Read JSON contract ABI
 	readTextFile('/js/Entereum.json')
 		.then(function(result){
-			var EntereumArtifact = result;
-			contracts.Entereum = TruffleContract(EntereumArtifact);
-			contracts.Entereum.setProvider(web3Provider);
+			var abi = result;
+			EntereumContract = TruffleContract(EntereumArtifact);
+			EntereumContract.setProvider(web3Provider);
 			// Work with him
 			var entereumInstance;
-
-			contracts.Entereum.deployed().then(function(instance) {
+			EntereumContract.deployed().then(function(instance) {
 				document.getElementById("deploying").innerHTML = "yes";
 				entereumInstance = instance;
-				return entereumInstance.totalSupply.call();
+				console.log(entereumInstance.totalSupply.call());
 			}, function(err){
 				console.log(err.message);
 				throw err;
