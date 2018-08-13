@@ -1,28 +1,29 @@
+"use strict";
+
 var web3Provider = null;
-var EthereumContract = null;
+var EntereumContract = null;
+var web3;
 
 initWeb3();
 
-function work() {	
+function work() {
 
 	// Read JSON contract ABI
-	readTextFile('/js/Entereum.json')
-		.then(function(result){
-			var abi = result;
-			EntereumContract = web3.eth.contract(abi);
-			//EntereumContract.setProvider(web3Provider);
-			// Work with him
-			var entereumInstance;
-			EthereumContract.deployed()
-				.then(function(instance){
-					document.getElementById("deploying").innerHTML = "yes";
-					entereumInstance = instance;
-					console.log(entereumInstance.totalSupply.call());	
-				}, function(err){
-					console.log(err.message);
-					throw err;
-				});
-		}
+	readTextFile('/build/contracts/Entereum.json').then(function(result) {
+		var abi = result;
+		EntereumContract = TruffleContract(abi);
+		EntereumContract.setProvider(web3Provider);
+		// Work with him
+		var entereumInstance;
+		EntereumContract.deployed().then(function(instance){
+				document.getElementById("deploying").innerHTML = "yes";
+				entereumInstance = instance;
+				console.log(entereumInstance.totalSupply.call());	
+			}, function(err){
+				console.log(err.message);
+				throw err;
+			});
+	});
 }
 
 function initWeb3(){
