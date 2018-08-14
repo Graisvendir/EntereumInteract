@@ -33,18 +33,18 @@ var App = {
 
 		App.contracts.Entereum.deployed()
 			.then(function(instance) {
-				console.log('something');
-				entereum = instance;
+				entereumInstance = instance;
 				document.getElementById("interact").innerHTML = "yes";
-				var result = entereumInstance.totalSupply.call();
-				document.getElementById("result").innerHTML = result;
-				return result;
-			}, function(err) {
-				console.log('something');
+				return entereumInstance.totalSupply.call();
+			}).then(function(enter) {
+				var entCoin = enter;
+				document.getElementById("result").innerHTML = entCoin;
+				console.log(entCoin);
+			}), function(err) {
+				console.log('something wrong(');
 				console.log(err.message);
 				throw err;
-			});
-		console.log('something');
+			};
 	},  
 };  
 
