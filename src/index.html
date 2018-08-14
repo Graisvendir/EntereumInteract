@@ -3,46 +3,79 @@
 	<title>app</title>
 	<link rel="stylesheet" href="./css/style.css">
 </head>
-<body>
-	<h1>My little app</h1>
-	<table>
-		<tbody>
-			<tr>
-				<td>
-					<input type="button" id="button" onclick="App.initWeb3()" value="Connect"> </input>
-				</td>
-				<td>
-					<p>Connect to contract: </p> 
-				</td>
-				<td>
-					<p style="color: #006400" id="connection"></p>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<input type="button" id="button" onclick="App.getTotalSuply()" value="Get total suply"> </input>
-				</td>
-				<td>
-					<p>Interact with Contract: </p> 
-				</td>
-				<td>
-					<p style="color: #006400" id="interact"></p>
-				</td>
-			</tr>
-			<tr>
-				<td></td>
-				<td>
-					<p>	Total supply:</p>
-				</td>
-				<td>
-					<p id="result"></p>
-				</td>
+<body onload="App.initWeb3()">
+	<div class="title">
+		<h1>My little app</h1>
+	</div>
+	<!--status-->
+	<div>
+		<table>
+			<tbody>
+				<tr>
+					<td>
+						<p>Connect to blockchain: </p> 
+					</td>
+					<td>
+						<p class="agreeText" id="connection"></p>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<p>Ready to interact with Contract: </p> 
+					</td>
+					<td>
+						<p class="agreeText" id="interact"></p>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<!--main grid-->
+	<div class="grid-container">
+		<div class="grid-item-1">
+			<h2>Get total supply</h2>
+			<table>
+				<tbody>
+					<tr>
+						<td>
+							<input type="button" id="button" onclick="App.getTotalSuply()" value="Get total suply">
+						</td>
+						<td>
+							<p>	Total supply:</p>
+						</td>
+						<td>
+							<p id="result"></p>
+						</td>
+					</tr>
+				</tbody>
 
-			</tr>
-		</tbody>
+			</table>
+		</div>
+		<div class="grid-item-2">
+			<h2>Transfer to #hex address#</h2>
+			<table>
+				<tbody>
+					<tr>
+						<input type="text" placeholder="to" id="to">
 
-	</table>
-	
+						<input type="text" placeholder="amount" id="value">
+					</tr>
+						
+						<td>
+							<input type="button" id="button" onclick="App.transaction()" value="Transact">
+						</td>
+						<td>
+							<p>Transaction: </p>
+						</td>
+						<td>
+							<p class="agreeText" id="transactSuccess"></p>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
+		</div>
+	</div>
 	<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
 	<script type="text/javascript" src="/js/truffle-contract.js"></script>
 	<script type="text/javascript" src="/js/app.js"></script>

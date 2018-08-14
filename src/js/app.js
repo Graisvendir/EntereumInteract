@@ -1,4 +1,4 @@
-var App = {
+let App = {
 	web3Provider: null,
 	contracts: {},
 
@@ -13,31 +13,32 @@ var App = {
 			console.log('Web3 Provider was not found, create Http Provider on http://127.0.0.1:8545');
 		}
 		web3 = new Web3(App.web3Provider);
-
+		document.getElementById("connection").innerHTML = "yes";
 		App.initContract();
 	},
   
 	initContract: function() {
 		readTextFile('Entereum.json')
 			.then(function(result) {
-				var abi = JSON.parse(result);
+				let abi = JSON.parse(result);
 				App.contracts.Entereum = TruffleContract(abi);
 				App.contracts.Entereum.setProvider(App.web3Provider);
-				document.getElementById("connection").innerHTML = "yes";
+				document.getElementById("interact").innerHTML = "yes";
 				console.log('Contract ABI was found, start to interact with him');
 			});
 	},
   
+	/**
+	 * get total suply of coin
+	 */
 	getTotalSuply: function() {
-		var entereumInstance;
-
+		let entereumInstance;
 		App.contracts.Entereum.deployed()
 			.then(function(instance) {
 				entereumInstance = instance;
-				document.getElementById("interact").innerHTML = "yes";
 				return entereumInstance.totalSupply.call();
 			}).then(function(enter) {
-				var entCoin = enter;
+				let entCoin = enter;
 				document.getElementById("result").innerHTML = entCoin;
 				console.log(entCoin);
 			}), function(err) {
@@ -45,13 +46,34 @@ var App = {
 				console.log(err.message);
 				throw err;
 			};
-	},  
+	},
+
+	/**
+	 * make transaction
+	 */
+	transaction: function() {
+		let entereumInstance;
+		//console.log(App.contracts.Entereum);
+		App.contracts.Entereum.deployed()
+			.then(function(instance) {
+				entereumInstance = instance;
+				let to = document.getElementById('to').value;
+				let value = parseInt(document.getElementById('value').value);
+				return entereumInstance.transfer(to, value);
+			}).then(function(enter) {
+				document.getElementById("transactSuccess").innerHTML = 'Success';
+				console.log('Transaction Success');
+			}), function(err) {
+				console.log(err.message);
+				throw err;
+			};
+	}
 };  
 
 
 function readTextFile(file){
-	var promise = new Promise(function(onSuccess, onError){
-		var rawFile = new XMLHttpRequest();
+	let promise = new Promise(function(onSuccess, onError){
+		let rawFile = new XMLHttpRequest();
 		rawFile.open("GET", file, true);
 		rawFile.onreadystatechange = () => {
 			if (rawFile.readyState === 4){
