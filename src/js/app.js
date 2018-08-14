@@ -1,48 +1,53 @@
-"use strict";
+var App = {
+	web3Provider: null,
+	contracts: {},
 
-var web3Provider = null;
-var EntereumContract = null;
-var web3;
+	initWeb3: function() {
+		// Is there an injected web3 instance?
+		if (typeof web3 !== 'undefined') {
+			App.web3Provider = web3.currentProvider;
+			console.log('Web3 Provider was found, take him');
+		} else {
+			// If no injected web3 instance is detected, fall back to Ganache
+			App.web3Provider = new Web3.providers.HttpProvider('http://127.0.0.1:8545');
+			console.log('Web3 Provider was not found, create Http Provider on http://127.0.0.1:8545');
+		}
+		web3 = new Web3(App.web3Provider);
 
-initWeb3();
-
-function work() {
-
-	// Read JSON contract ABI
-	readTextFile('/build/contracts/Entereum.json').then(function(result) {
-		var abi = result;
-		EntereumContract = TruffleContract(abi);
-		EntereumContract.setProvider(web3Provider);
-		// Work with him
-		var entereumInstance;
-		EntereumContract.deployed().then(function(instance){
-				document.getElementById("deploying").innerHTML = "yes";
-				entereumInstance = instance;
-				console.log(entereumInstance.totalSupply.call());	
-			}, function(err){
-				console.log(err.message);
-				throw err;
+		App.initContract();
+	},
+  
+	initContract: function() {
+		readTextFile('Entereum.json')
+			.then(function(result) {
+				var abi = result;
+				App.contracts.Entereum = TruffleContract(abi);
+				App.contracts.Entereum.setProvider(App.web3Provider);
+				document.getElementById("connection").innerHTML = "yes";
+				console.log('Contract ABI was found, start to interact with him');
 			});
-	});
-}
+	},
+  
+	getTotalSuply: function() {
+		var entereumInstance;
 
-function initWeb3(){
-	// Is there an injected web3 instance?
-    if (typeof web3 !== 'undefined') {
-		web3Provider = web3.currentProvider;
-	} else {
-		// If no injected web3 instance is detected, fall back to Ganache
-		web3Provider = new Web3.providers.HttpProvider('http://127.0.0.1:8545');
-	}
-	web3 = new Web3(web3Provider);
-	document.getElementById("connection").innerHTML = "yes";
-}
+		App.contracts.Entereum.deployed()
+			.then(function(instance) {
+				entereum = instance;
+
+				return entereumInstance.totalSupply.call();
+			}).then(function() {
+				document.getElementById("interact").innerHTML = "yes";
+			}).catch(function(err) {
+				console.log(err.message);
+			});
+	},  
+};  
 
 
 function readTextFile(file){
 	var promise = new Promise(function(onSuccess, onError){
 		var rawFile = new XMLHttpRequest();
-		var json;
 		rawFile.open("GET", file, true);
 		rawFile.onreadystatechange = () => {
 			if (rawFile.readyState === 4){
