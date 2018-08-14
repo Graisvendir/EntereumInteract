@@ -20,7 +20,7 @@ var App = {
 	initContract: function() {
 		readTextFile('Entereum.json')
 			.then(function(result) {
-				var abi = result;
+				var abi = JSON.parse(result);
 				App.contracts.Entereum = TruffleContract(abi);
 				App.contracts.Entereum.setProvider(App.web3Provider);
 				document.getElementById("connection").innerHTML = "yes";
@@ -33,14 +33,18 @@ var App = {
 
 		App.contracts.Entereum.deployed()
 			.then(function(instance) {
+				console.log('something');
 				entereum = instance;
-
-				return entereumInstance.totalSupply.call();
-			}).then(function() {
 				document.getElementById("interact").innerHTML = "yes";
-			}).catch(function(err) {
+				var result = entereumInstance.totalSupply.call();
+				document.getElementById("result").innerHTML = result;
+				return result;
+			}, function(err) {
+				console.log('something');
 				console.log(err.message);
+				throw err;
 			});
+		console.log('something');
 	},  
 };  
 
