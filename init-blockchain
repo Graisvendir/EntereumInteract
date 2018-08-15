@@ -1,0 +1,4 @@
+tilix -a session-add-down -x "ganache-cli -p 8545 -i 1347"
+truffle compile --reset
+truffle migrate --reset
+npm run dev
