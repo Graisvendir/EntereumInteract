@@ -2,6 +2,10 @@ let App = {
 	web3Provider: null,
 	contracts: {},
 
+	/**
+	 * create or attach to web3 provider
+	 * call initContract
+	 */
 	initWeb3: function() {
 		// Is there an injected web3 instance?
 		if (typeof web3 !== 'undefined') {
@@ -16,7 +20,13 @@ let App = {
 		document.getElementById("connection").innerHTML = "yes";
 		App.initContract();
 	},
-  
+
+	/**
+	 * init contract:
+	 * - read file from /builds/contracts
+	 * - parce to JSON type(it is ABI of contract)
+	 * - create object TruffleContract with this ABI and set provider
+	 */
 	initContract: function() {
 		readTextFile('Entereum.json')
 			.then(function(result) {
@@ -70,7 +80,10 @@ let App = {
 	}
 };  
 
-
+/**
+ * read file via XMLHttpRequest
+ * @param {string} file name of file 
+ */
 function readTextFile(file){
 	let promise = new Promise(function(onSuccess, onError){
 		let rawFile = new XMLHttpRequest();
