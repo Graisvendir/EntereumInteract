@@ -7,73 +7,47 @@
 	<div class="title">
 		<h1>My little app</h1>
 	</div>
-	<!--status-->
-	<div>
-		<table>
-			<tbody>
-				<tr>
-					<td>
-						<p>Connect to blockchain: </p> 
-					</td>
-					<td>
-						<p class="agreeText" id="connection"></p>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<p>Ready to interact with Contract: </p> 
-					</td>
-					<td>
-						<p class="agreeText" id="interact"></p>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-	<!--main grid-->
 	<div class="grid-container">
-		<div class="grid-item-1">
-			<h2>Get total supply</h2>
+		<!--status-->
+		<div class="grid-status">
 			<table>
 				<tbody>
 					<tr>
 						<td>
-							<input type="button" id="button" onclick="App.getTotalSuply()" value="Get total suply">
+							<p>Connect to blockchain: </p> 
 						</td>
 						<td>
-							<p>	Total supply:</p>
+							<p class="success" id="connection"></p>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p>Ready to interact with Contract: </p> 
 						</td>
 						<td>
-							<p id="result"></p>
+							<p class="success" id="interact"></p>
 						</td>
 					</tr>
 				</tbody>
-
 			</table>
 		</div>
-		<div class="grid-item-2">
+		<div class="grid-supply">
+			<h2>Get total supply</h2>
+			<input type="button" id="button" onclick="App.getTotalSuply()" value="Get total suply">
+			<p>	Total supply: <span class="success" id="result"></span></p>
+		</div>
+		<div class="grid-trunsfer">
 			<h2>Transfer to #hex address#</h2>
-			<table>
-				<tbody>
-					<tr>
-						<input type="text" placeholder="to" id="to">
-
-						<input type="text" placeholder="amount" id="value">
-					</tr>
-						
-						<td>
-							<input type="button" id="button" onclick="App.transaction()" value="Transact">
-						</td>
-						<td>
-							<p>Transaction: </p>
-						</td>
-						<td>
-							<p class="agreeText" id="transactSuccess"></p>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			
+			<input type="text" placeholder="to" id="to">
+			<input type="text" placeholder="amount" id="value">
+			<input type="button" id="button" onclick="App.transaction()" value="Transact">
+			<p>Transaction: <span class="success" id="transactSuccess"><span></p>
+		</div>
+		<div class="grid-balance">
+			<h2>Balance of #hex address#</h2>
+			<input type="text" placeholder="balance of" id="balanceOf">
+			<input type="button" id="button" onclick="App.balanceOf()" value="Take balance">
+			<p>Balance: <span class="success" id="balance"></span></p>
 		</div>
 	</div>
 	<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>

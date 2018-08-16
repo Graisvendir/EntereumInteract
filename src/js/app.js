@@ -64,19 +64,48 @@ let App = {
 	transaction: function() {
 		let entereumInstance;
 		//console.log(App.contracts.Entereum);
-		App.contracts.Entereum.deployed()
-			.then(function(instance) {
+		web3.eth.getAccounts(function(error, accounts){
+			if (error) {
+				console.log(error);
+			}
+			let account = accounts[0];
+
+			App.contracts.Entereum.deployed().then(function(instance) {
 				entereumInstance = instance;
 				let to = document.getElementById('to').value;
 				let value = parseInt(document.getElementById('value').value);
-				return entereumInstance.transfer(to, value);
-			}).then(function(enter) {
+				return entereumInstance.transfer(to, value, {from: account});
+			}).then(function(event) {
+				console.log(event.log);
 				document.getElementById("transactSuccess").innerHTML = 'Success';
-				console.log('Transaction Success');
 			}), function(err) {
 				console.log(err.message);
 				throw err;
+			}
+		});
+	},
+
+	balanceOf: function(){
+		let entereumInstance;
+		web3.eth.getAccounts(function(error, accounts){
+			if (error) {
+				console.log(error);
+			}
+			let account = accounts[0];
+
+			App.contracts.Entereum.deployed().then(function(instance) {
+				entereumInstance = instance;
+				let balanceAddress = document.getElementById("balanceOf").value;
+				return entereumInstance.balanceOf.call(balanceAddress, {from: account});
+			}).then(function(balance) {
+				document.getElementById("balance").innerHTML = balance;
+				console.log(balance);
+			}), function(err) {
+				console.log('something wrong');
+				console.log(err.message);
+				throw err;
 			};
+		});
 	}
 };  
 

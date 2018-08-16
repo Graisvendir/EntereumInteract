@@ -1,40 +1,46 @@
-body{
-	max-width: 980px;
-	margin: auto;
-	padding: 0px 15px;
-}
-
 h1{
 	font-size: 40px;
 }
 
-.agreeText{
+.success{
 	color: #006400;
+}
+
+.inline{
+	display: inline-block;
 }
 
 .title{
 	text-align: center;
-	max-width: 400px;
+	max-width: 400px;	
 	margin: 15px auto 15px;
 	border-bottom: 1px solid rgb(175, 175, 175);
 }
-
+/*0284a0ad08a5879f64099215f5577efbfe596b8a99b8386676c2c332037a0dd2*/
 /*		grid		*/
 .grid-container{
 	display: grid;
+	max-width: 1000px;
+	margin: auto;
 	grid-gap: 10px;
-	grid-template-areas: 'item-1 item-2';
+	justify-content: center;
+	grid-template-areas:
+			'status supply'
+			'transfer balance';
 }
 
-.grid-main{
-	grid-area: 'main';
-	grid-column: 1 / 2;
+.grid-status{
+	grid-area: 'status';
 }
 
-.grid-item-1{
-	grid-area: 'item-1';
+.grid-supply{
+	grid-area: 'supply';
 }
 
-.grid-item-2{
-	grid-area: 'item-2';
+.grid-transfer{
+	grid-area: 'transfer';
+}
+
+.grid-balance{
+	grid-area: 'balance';
 }
