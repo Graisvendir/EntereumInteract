@@ -11,17 +11,17 @@
 		<button class="tablinks" onclick="openCity(event, 'registration')">Sign Up</button>
 		<button class="tablinks" onclick="openCity(event, 'interactContract')">Interact</button>
 	</div>
-	<div class="tabcontent" id="registation">
+	<div class="tabcontent grid-auth" id="registration">
 		<div>
-			<button>Sign In</button>
-			<button>Sign Up</button>
+			<button class="button">Sign In</button>
+			<button class="button">Sign Up</button>
 		</div>
 		<div class="singIn">
 			
 		</div>
 		<div class="signUp"></div>
 	</div>
-	<div class="grid-container tabcontent" id="interactContract">
+	<div class="grid-interact tabcontent hide" id="interactContract">
 		<!--status-->
 		<div class="grid-status">
 			<table>
@@ -47,20 +47,20 @@
 		</div>
 		<div class="grid-supply">
 			<h2>Get total supply</h2>
-			<input type="button" id="button" onclick="App.getTotalSuply()" value="Get total suply">
+			<input class="button" type="button" id="button" onclick="App.getTotalSuply()" value="Get total suply">
 			<p>	Total supply: <span class="success" id="result"></span></p>
 		</div>
 		<div class="grid-trunsfer">
 			<h2>Transfer to #hex address#</h2>
 			<input type="text" placeholder="to" id="to">
 			<input type="text" placeholder="amount" id="value">
-			<input type="button" id="button" onclick="App.transaction()" value="Transact">
+			<input class="button" type="button" id="button" onclick="App.transaction()" value="Transact">
 			<p>Transaction: <span class="success" id="transactSuccess"><span></p>
 		</div>
 		<div class="grid-balance">
 			<h2>Balance of #hex address#</h2>
 			<input type="text" placeholder="balance of" id="balanceOf">
-			<input type="button" id="button" onclick="App.balanceOf()" value="Take balance">
+			<input class="button" type="button" id="button" onclick="App.balanceOf()" value="Take balance">
 			<p>Balance: <span class="success" id="balance"></span></p>
 		</div>
 	</div>
