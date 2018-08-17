@@ -4,26 +4,45 @@
 	<link rel="stylesheet" href="./css/style.css">
 </head>
 <body onload="App.initWeb3()">
-	<div class="title">
-		<h1>My little app</h1>
-	</div>
+	<h1>Entereum</h1>
 	<div class="tab">
 		<button class="tablinks" onclick="openCity(event, 'registration')">Sign Up</button>
+		<button class="tablinks" onclick="openCity(event, 'verification')">Verificate</button>
 		<button class="tablinks" onclick="openCity(event, 'interactContract')">Interact</button>
 	</div>
-	<div class="tabcontent grid-auth" id="registration">
-		<div>
-			<button class="button">Sign In</button>
-			<button class="button">Sign Up</button>
+	<div class="tabcontent" id="registration">
+		<div class="grid-auth">
+			<div class="grid-singIn">
+				<h3>Sing In</h3>
+				<input type="text" placeholder="e-mail">
+				<br />
+				<input type="text" placeholder="password">
+				<br /> 
+				<button class="center button" onclick="">Sing In</button>
+			</div>
+			<div class="grid-signUp">
+				<h3>Sing Up</h3>
+				<input type="text" placeholder="e-mail" id="email">
+				<br />
+				<input type="text" placeholder="username" id="username">
+				<br />
+				<input type="text" placeholder="password" id="password">
+				<br />
+				<input type="text" placeholder="again password" id="aPassword">
+				<br />
+				<button class="center button" class="button" onclick="">Sing Up</button>
+				<span class="success" id="signUpSuccess"></span>
+			</div>
 		</div>
-		<div class="singIn">
-			
-		</div>
-		<div class="signUp"></div>
+		
 	</div>
-	<div class="grid-interact tabcontent hide" id="interactContract">
+	<div class="tabcontent" id="verification">
+		
+	</div>
+	<div class="grid-interact tabcontent" id="interactContract">
 		<!--status-->
 		<div class="grid-status">
+			<h2>Status</h2>
 			<table>
 				<tbody>
 					<tr>
