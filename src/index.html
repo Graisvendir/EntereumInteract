@@ -6,10 +6,11 @@
 <body onload="App.initWeb3()">
 	<h1>Entereum</h1>
 	<div class="tab">
-		<button class="tablinks" onclick="openCity(event, 'registration')">Sign Up</button>
-		<button class="tablinks" onclick="openCity(event, 'verification')">Verificate</button>
-		<button class="tablinks" onclick="openCity(event, 'interactContract')">Interact</button>
+		<button class="tablinks" onclick="openTab(event, 'registration')">Sign Up</button>
+		<button class="tablinks" onclick="tryToOpenTab()">Verificate</button>
+		<button class="tablinks" onclick="openTab(event, 'interactContract')">Interact</button>
 	</div>
+	<!--registration-->
 	<div class="tabcontent" id="registration">
 		<div class="grid-auth">
 			<div class="grid-singIn">
@@ -36,57 +37,65 @@
 		</div>
 		
 	</div>
+	<!--verification-->
 	<div class="tabcontent" id="verification">
-		
+		<div class="grid-verification">
+			<input type="text" id="verificationAmount">
+			<input type="text" id="verificationAddress">
+		</div>
 	</div>
-	<div class="grid-interact tabcontent" id="interactContract">
-		<!--status-->
-		<div class="grid-status">
-			<h2>Status</h2>
-			<table>
-				<tbody>
-					<tr>
-						<td>
-							<p>Connect to blockchain: </p> 
-						</td>
-						<td>
-							<p class="success" id="connection"></p>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<p>Ready to interact with Contract: </p> 
-						</td>
-						<td>
-							<p class="success" id="interact"></p>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-		<div class="grid-supply">
-			<h2>Get total supply</h2>
-			<input class="button" type="button" id="button" onclick="App.getTotalSuply()" value="Get total suply">
-			<p>	Total supply: <span class="success" id="result"></span></p>
-		</div>
-		<div class="grid-trunsfer">
-			<h2>Transfer to #hex address#</h2>
-			<input type="text" placeholder="to" id="to">
-			<input type="text" placeholder="amount" id="value">
-			<input class="button" type="button" id="button" onclick="App.transaction()" value="Transact">
-			<p>Transaction: <span class="success" id="transactSuccess"><span></p>
-		</div>
-		<div class="grid-balance">
-			<h2>Balance of #hex address#</h2>
-			<input type="text" placeholder="balance of" id="balanceOf">
-			<input class="button" type="button" id="button" onclick="App.balanceOf()" value="Take balance">
-			<p>Balance: <span class="success" id="balance"></span></p>
+	<!--interaction-->
+	<div class="tabcontent" id="interactContract">
+		<div class="grid-interact">
+			<!--status-->
+			<div class="grid-status">
+				<h2>Status</h2>
+				<table>
+					<tbody>
+						<tr>
+							<td>
+								<p>Connect to blockchain: </p> 
+							</td>
+							<td>
+								<p class="success" id="connection"></p>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<p>Ready to interact with Contract: </p> 
+							</td>
+							<td>
+								<p class="success" id="interact"></p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="grid-supply">
+				<h2>Get total supply</h2>
+				<input class="button" type="button" id="button" onclick="App.getTotalSuply()" value="Get total suply">
+				<p>	Total supply: <span class="success" id="result"></span></p>
+			</div>
+			<div class="grid-trunsfer">
+				<h2>Transfer to #hex address#</h2>
+				<input type="text" placeholder="to" id="to">
+				<input type="text" placeholder="amount" id="value">
+				<input class="button" type="button" id="button" onclick="App.transaction()" value="Transact">
+				<p>Transaction: <span class="success" id="transactSuccess"><span></p>
+			</div>
+			<div class="grid-balance">
+				<h2>Balance of #hex address#</h2>
+				<input type="text" placeholder="balance of" id="balanceOf">
+				<input class="button" type="button" id="button" onclick="App.balanceOf()" value="Take balance">
+				<p>Balance: <span class="success" id="balance"></span></p>
+			</div>
 		</div>
 	</div>
 	<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
 	<script type="text/javascript" src="/js/truffle-contract.js"></script>
 	<script type="text/javascript" src="/js/auth.js"></script>
 	<script type="text/javascript" src="/js/tabs.js"></script>
+	<script type="text/javascript" src="/js/verification.js"></script>
 	<script type="text/javascript" src="/js/app.js"></script>
 	
 </body>

@@ -13,19 +13,22 @@
 
 class user{
 
-	constructor(_email, _userName, _password){
+	constructor(_email, _userName, _password, _id){
 		this.email = _email;
 		this.userName = _userName;
 		this.password = _password;
-		this.publicKey;
+		this.id = _id;
 	}
-
 }
 
+// local base of users
 let userBase = [];
-let userLog;
-let userPass;
+//remember signed in user
+let userSignedIn;
 
+/**
+ * get information about new user from inputs
+ */
 function getUp(){
 	let promise = new Promise(function(onSuccess, onReject){
 		let _email = document.getElementById('emailUp').value;
@@ -33,7 +36,7 @@ function getUp(){
 		let _password = document.getElementById('passwordUp').value;
 		let aPassword = document.getElementById('aPassword').value;
 		if (_password === aPassword){
-			onSuccess(new user(_email, _userName, _password));
+			onSuccess(new user(_email, _userName, _password, userBase.length));
 		} else {
 			onReject(console.log('not correct password'));
 		}
@@ -41,6 +44,10 @@ function getUp(){
 	return promise;
 }
 
+/**
+ * check input data and data from base
+ * if it there, then remember it
+ */
 function singIn(){
 	let _email = document.getElementById('email').value;
 	let _password = document.getElementById('password').value;
@@ -50,13 +57,15 @@ function singIn(){
 			break;
 	}
 	if (i < userBase.length){
-		userLog = userBase[i].email;
-		userPass = userBase[i].password;
+		userSignedIn = userBase[i];
 	} else {
 		alert('Wrong e-mail or password');
 	}
 }
 
+/**
+ * push new user to base
+ */
 function singUp(){
 	getUp().then(function(_user){
 		document.getElementById('signUpSuccess').innerHTML = 'V';
