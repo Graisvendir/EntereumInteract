@@ -10,3 +10,22 @@ function tryToOpenTab(){
         
     }
 }
+
+function findTrasaction(){
+    //wait new transaction on our address
+    let subscription = web3.eth.subscribe('pendingTransactions', function(error, result){
+        if (!error){
+            console.log(result);
+        }
+    })
+    .on("data", function(transaction){
+        console.log(transaction);
+        
+    });
+    
+    // unsubscribes the subscription
+    subscription.unsubscribe(function(error, success){
+        if(success)
+            console.log('Successfully unsubscribed!');
+    });
+}

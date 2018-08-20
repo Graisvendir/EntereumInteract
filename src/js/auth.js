@@ -58,6 +58,7 @@ function singIn(){
 	}
 	if (i < userBase.length){
 		userSignedIn = userBase[i];
+		console.log(userSignedIn);
 	} else {
 		alert('Wrong e-mail or password');
 	}
@@ -70,5 +71,6 @@ function singUp(){
 	getUp().then(function(_user){
 		document.getElementById('signUpSuccess').innerHTML = 'V';
 		userBase.push(_user);
+		console.log('signed up');
 	})
 }
