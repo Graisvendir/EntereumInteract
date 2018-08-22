@@ -17,6 +17,9 @@ let App = {
 			console.log('Web3 Provider was not found, create Http Provider on http://127.0.0.1:8545');
 		}
 		web3 = new Web3(App.web3Provider);
+		contractOwner = web3.eth.accounts[0];
+		console.log(contractOwner);
+		
 		document.getElementById("connection").innerHTML = "yes";
 		App.initContract();
 	},

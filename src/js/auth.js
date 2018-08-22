@@ -26,6 +26,8 @@ let userBase = [];
 //remember signed in user
 let userSignedIn;
 
+let contractOwner = web3.eth.accounts[0];
+
 /**
  * get information about new user from inputs
  */
@@ -36,7 +38,7 @@ function getUp(){
 		let _password = document.getElementById('passwordUp').value;
 		let aPassword = document.getElementById('aPassword').value;
 		if (_password === aPassword){
-			onSuccess(new user(_email, _userName, _password, userBase.length));
+			onSuccess(new user(_email, _userName, _password, userBase.length + 2));
 		} else {
 			onReject(console.log('not correct password'));
 		}

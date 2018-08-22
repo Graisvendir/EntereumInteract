@@ -9,48 +9,72 @@ function tryToOpenTab(){
 		// becouse amount depends on user account 
 		alert('Not logined!');
 	} else {
-		openTab(event, 'verification');
-		document.getElementById('verificationAmount').value = userSignedIn.id;
-		let accountOwner = document.getElementById('verificationAddress').value = web3.eth.accounts[0];
-		let transactions = []; 
-		transactions = getTransactionsByAccount(accountOwner)
-		.then(
-			(transactions) =>{
-				for (let i = 0; i < transactions.length; i++){
-					console.log("  tx hash          : " + transactions[i].hash + "\n"
-						+ "   from            : " + transactions[i].from + "\n" 
-						+ "   to              : " + transactions[i].to + "\n"
-						+ "   value           : " + transactions[i].value + "\n");
-				}
+		let promise = new Promise(function(onSuccess, onReject){
+			openTab(event, 'verification');
+			
+			document.getElementById('verificationAmount').value = userSignedIn.id;
+			let accountOwner = document.getElementById('verificationAddress').value = contractOwner;
+			onSuccess();
+		}).then(() => {
+			let blockNumberNow = 0;
+			while (!userSignedIn.address) {
+				setTimeout(function(){
+					web3.eth.getBlockNumber((error, result) => {
+						blockNumberNow = result;
+						getTransactionsOfAccount(account, blockNumberNow, blockNumberNow)
+							.then(
+								transactions => {
+									for (let i = 0; i < transactions.length; i++){
+										if (transactions[i].value === userSignedIn.id){
+											userSignedIn.address = transactions[i].from;
+											alert('verificated!');
+											onSuccess(userSignedIn.address);
+										}
+									}
+								}
+							);
+						console.log(blockNumberNow);
+					});
+				}, 10000);
 			}
-		);
+		});
 	}
 }
 
+/*
+1. user send transaction
+2. we take her
+	1. wait new transaction
+	2. check for amount(id)
+	3. if it is, verificate user
+*/
+
 /**
- * that show all transactions in interval
+ * that show all transactions in interval from the end block
  * @param {string} account we are looking for
+ * @param {number} interval count of blocks from end block
  */
-function getTransactionsByAccount(account) {
+function searchInInterval(account, interval) {
 	let promise = new Promise(function(onSuccess, onReject){
 		
 		let startBlockNumber;
 		web3.eth.getBlockNumber((error, endBlockNumber) => {
-			console.log("Using endBlockNumber: " + endBlockNumber);
-			if (startBlockNumber == null) {
-				startBlockNumber = endBlockNumber - 1000;
-				if (startBlockNumber < 0)
-					startBlockNumber = 0;
-				console.log("Using startBlockNumber: " + startBlockNumber);
-			}
+			startBlockNumber = endBlockNumber - interval;
+			if (startBlockNumber < 0)
+				startBlockNumber = 0;
+			
 			console.log("Searching for transactions to/from account \"" + account + "\" within blocks "  + startBlockNumber + " and " + endBlockNumber);
 
-			checkBlocks(account, startBlockNumber, endBlockNumber)
-			.then(
-				transactions => {
-					onSuccess(transactions);
-				}
-			);
+			getTransactionsOfAccount(account, startBlockNumber, endBlockNumber)
+				.then(
+					transactions => {
+						onSuccess(transactions);
+					}
+				).catch(
+					error => {
+						onReject(error);
+					}
+				);
 		});
 	});
 	return promise;
@@ -63,7 +87,7 @@ function getTransactionsByAccount(account) {
  * @param {number} startBlockNumber 
  * @param {number} endBlockNumber 
  */
-function checkBlocks(account, startBlockNumber, endBlockNumber){
+function getTransactionsOfAccount(account, startBlockNumber, endBlockNumber){
 	const blockPromises = [];
 	//create array of promises, that store every transaction
 	for (let i = startBlockNumber; i <= endBlockNumber; i++) {
