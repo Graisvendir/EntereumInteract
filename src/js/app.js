@@ -70,6 +70,7 @@ let App = {
 		web3.eth.getAccounts(function(error, accounts){
 			if (error) {
 				console.log(error);
+				throw error;
 			}
 			let account = accounts[0];
 
@@ -93,6 +94,7 @@ let App = {
 		web3.eth.getAccounts(function(error, accounts){
 			if (error) {
 				console.log(error);
+				throw error;
 			}
 			let account = accounts[0];
 
