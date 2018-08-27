@@ -48,7 +48,7 @@ contract Entereum {
     string constant private symbol = "ENT";
     uint8 constant private decimals = 18;
     uint private _totalSupply = 500000000e18; 
-    address private ownerAddr;
+    address public ownerAddr;
 
     mapping (address => uint) balances;
     mapping (address => mapping (address => uint)) allowed;

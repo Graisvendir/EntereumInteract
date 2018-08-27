@@ -1,84 +1,70 @@
 'use strict';
 
+var BigNumber = require('bignumber.js');
+
 /**
  * then open tab 'Verification'
  * show amount of money and addres for transact money
  */
 function tryToOpenTab(){
-	if (userSignedIn === undefined){
+	if (userSignedIn === undefined) {
 		// becouse amount depends on user account 
 		alert('Not logined!');
 	} else {
 		let promise = new Promise(function(onSuccess, onReject){
 			openTab(event, 'verification');
-			
+			console.log(contractOwner);
 			document.getElementById('verificationAmount').value = userSignedIn.id;
-			let accountOwner = document.getElementById('verificationAddress').value = contractOwner;
+			document.getElementById('verificationAddress').value = contractOwner;
 			onSuccess();
 		}).then(() => {
 			let blockNumberNow = 0;
-			while (!userSignedIn.address) {
-				setTimeout(function(){
-					web3.eth.getBlockNumber((error, result) => {
-						blockNumberNow = result;
-						getTransactionsOfAccount(account, blockNumberNow, blockNumberNow)
-							.then(
-								transactions => {
-									for (let i = 0; i < transactions.length; i++){
-										if (transactions[i].value === userSignedIn.id){
-											userSignedIn.address = transactions[i].from;
-											alert('verificated!');
-											onSuccess(userSignedIn.address);
-										}
+			const onTimeout = function() {
+				if(userSignedIn.address) {
+					return;
+				}
+				web3.eth.getBlockNumber((error, result) => {
+					blockNumberNow = result;
+					getTransactionsOfAccount(contractOwner, blockNumberNow, blockNumberNow)
+						.then(
+							transactions => {
+								for (let i = 0; i < transactions.length; i++) { 
+									let bigTransact = (transactions[i].value) / 1000000000000000000; 
+									console.log(bigTransact);
+									if (bigTransact === userSignedIn.id) {
+										userSignedIn.address = transactions[i].from;
+										alert('verificated!');
+										//App.transaction(userSignedIn.address, userSignedIn.id);
+										//onSuccess(userSignedIn.address);
 									}
 								}
-							);
-						console.log(blockNumberNow);
-					});
-				}, 10000);
-			}
+							}
+						).then(success => {
+							if (!userSignedIn.address)
+								setTimeout(onTimeout, 10000);
+							return success;
+						}, error => {
+							setTimeout(onTimeout, 10000);
+							throw error;
+						});
+				});
+			};
+			onTimeout();
 		});
 	}
 }
 
+
 /*
-1. user send transaction
+		Verification plan
+1. user send transaction with 
 2. we take her
-	1. wait new transaction
-	2. check for amount(id)
+	1. wait new block
+	2. check for amount(id) all transactions
 	3. if it is, verificate user
+	4. if time out, stop waiting
+	5. else 2.1 point again
 */
-
-/**
- * that show all transactions in interval from the end block
- * @param {string} account we are looking for
- * @param {number} interval count of blocks from end block
- */
-function searchInInterval(account, interval) {
-	let promise = new Promise(function(onSuccess, onReject){
-		
-		let startBlockNumber;
-		web3.eth.getBlockNumber((error, endBlockNumber) => {
-			startBlockNumber = endBlockNumber - interval;
-			if (startBlockNumber < 0)
-				startBlockNumber = 0;
-			
-			console.log("Searching for transactions to/from account \"" + account + "\" within blocks "  + startBlockNumber + " and " + endBlockNumber);
-
-			getTransactionsOfAccount(account, startBlockNumber, endBlockNumber)
-				.then(
-					transactions => {
-						onSuccess(transactions);
-					}
-				).catch(
-					error => {
-						onReject(error);
-					}
-				);
-		});
-	});
-	return promise;
-}
 
 /**
  * check all blocks from interval [startBlockNumber, endBlockNumber]
@@ -94,21 +80,24 @@ function getTransactionsOfAccount(account, startBlockNumber, endBlockNumber){
 		console.log("Searching block " + i);
 		const blockPromise = new Promise((blockSuccess, blockError) => {
 			web3.eth.getBlock(i, true, (error, block) => {
-				if(error) {
+				if (error) {
 					blockError(error);
 					return;
 				}
-
-				if(!block || !block.transactions) {
+				if (!block || !block.transactions) {
 					blockSuccess([]);
 					return;
 				}
 				const accountTransactions = block.transactions
 					.filter(transaction => account == transaction.from || account == transaction.to);
+				console.log(accountTransactions);
+					
 				blockSuccess(accountTransactions);
+				return accountTransactions;
 			});
 		});
 		blockPromises.push(blockPromise);
+		
 	}
 
 	return Promise.all(blockPromises)

@@ -17,9 +17,6 @@ let App = {
 			console.log('Web3 Provider was not found, create Http Provider on http://127.0.0.1:8545');
 		}
 		web3 = new Web3(App.web3Provider);
-		contractOwner = web3.eth.accounts[0];
-		console.log(contractOwner);
-		
 		document.getElementById("connection").innerHTML = "yes";
 		App.initContract();
 	},
@@ -38,6 +35,16 @@ let App = {
 				App.contracts.Entereum.setProvider(App.web3Provider);
 				document.getElementById("interact").innerHTML = "yes";
 				console.log('Contract ABI was found, start to interact with him');
+				App.contracts.Entereum.deployed()
+					.then(
+						(instance) => {
+							return instance.ownerAddr.call();
+						}
+					).then(
+						(owner) => {
+							contractOwner = owner;
+						}
+					);				
 			});
 	},
   
@@ -50,10 +57,6 @@ let App = {
 			.then(function(instance) {
 				entereumInstance = instance;
 				return entereumInstance.totalSupply.call();
-			}).then(function(enter) {
-				let entCoin = enter;
-				document.getElementById("result").innerHTML = entCoin;
-				console.log(entCoin);
 			}), function(err) {
 				console.log('something wrong(');
 				console.log(err.message);
@@ -64,8 +67,7 @@ let App = {
 	/**
 	 * make transaction
 	 */
-	transaction: function() {
-		let entereumInstance;
+	transaction: function(to, value) {
 		//console.log(App.contracts.Entereum);
 		web3.eth.getAccounts(function(error, accounts){
 			if (error) {
@@ -75,13 +77,7 @@ let App = {
 			let account = accounts[0];
 
 			App.contracts.Entereum.deployed().then(function(instance) {
-				entereumInstance = instance;
-				let to = document.getElementById('to').value;
-				let value = parseInt(document.getElementById('value').value);
-				return entereumInstance.transfer(to, value, {from: account});
-			}).then(function(event) {
-				console.log(event.log);
-				document.getElementById("transactSuccess").innerHTML = 'Success';
+				return instance.transfer(to, value, {from: account});
 			}), function(err) {
 				console.log(err.message);
 				throw err;
@@ -89,8 +85,7 @@ let App = {
 		});
 	},
 
-	balanceOf: function(){
-		let entereumInstance;
+	balanceOf: function(owner){
 		web3.eth.getAccounts(function(error, accounts){
 			if (error) {
 				console.log(error);
@@ -99,12 +94,7 @@ let App = {
 			let account = accounts[0];
 
 			App.contracts.Entereum.deployed().then(function(instance) {
-				entereumInstance = instance;
-				let balanceAddress = document.getElementById("balanceOf").value;
-				return entereumInstance.balanceOf.call(balanceAddress, {from: account});
-			}).then(function(balance) {
-				document.getElementById("balance").innerHTML = balance;
-				console.log(balance);
+				return instance.balanceOf.call(owner, {from: account});
 			}), function(err) {
 				console.log('something wrong');
 				console.log(err.message);

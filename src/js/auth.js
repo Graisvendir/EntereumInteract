@@ -26,7 +26,7 @@ let userBase = [];
 //remember signed in user
 let userSignedIn;
 
-let contractOwner = web3.eth.accounts[0];
+let contractOwner = '0xb7719d5aaf3cdec8a8838324dd14fb96610f9e81';
 
 /**
  * get information about new user from inputs
