@@ -26,7 +26,7 @@ $ npm run dev
 
 5. Install extansion MetaMask in browser or browser Mist. They will connect to private blockchain via web3 API.
 
-6. (for MetaMask) open extansion and import account wia private key, there are in first terminal window.
+6. (for MetaMask) open extansion and import account via private key, there are in first terminal window.
 
    (for Mist) open mist with comand in terminal:
 ```sh
